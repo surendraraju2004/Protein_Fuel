@@ -1,0 +1,13 @@
+{
+  "name": "proteinfuel-monolith",
+  "version": "1.0.0",
+  "description": "Unified Full-Stack Deployment for ProteinFuel",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install",
+    "start": "cd backend && npm start",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

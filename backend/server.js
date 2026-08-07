@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const path = require('path');
 
 dotenv.config();
 connectDB();
@@ -35,8 +36,12 @@ app.use('/api/nutrition', require('./routes/nutritionRoutes'));
 app.use('/api/blog', require('./routes/blogRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
 
-// Health check
-app.get('/', (req, res) => res.json({ message: 'NutriBite API is running 🥜', version: '1.0.0' }));
+// Serve Frontend
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
+});
 
 // Error middleware
 app.use(require('./middleware/errorMiddleware'));
