@@ -1,0 +1,41 @@
+services:
+  # Backend Node.js API
+  - type: web
+    name: proteinfuel-api
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: CLIENT_URL
+        # This allows the frontend to communicate with the backend
+        value: "*"
+      # You will need to manually add these in the Render dashboard:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+
+  # Frontend React App
+  - type: web
+    name: proteinfuel-web
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        # We link this directly to the backend's public URL automatically!
+        fromService:
+          type: web
+          name: proteinfuel-api
+          envVarKey: RENDER_EXTERNAL_URL
+    routes:
+      # This handles React Router's client-side routing on a static site
+      - type: rewrite
+        source: /*
+        destination: /index.html
