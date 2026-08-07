@@ -7,6 +7,7 @@ const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 3000 });
     console.log(`\x1b[32m✅ MongoDB Connected: ${conn.connection.host}\x1b[0m`);
+    await autoSeed();
     return;
   } catch (err) {
     console.log(`\x1b[33m⚠️  Local MongoDB not available (${err.message.split(',')[0]})\x1b[0m`);
